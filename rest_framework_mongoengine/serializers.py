@@ -224,7 +224,8 @@ class DocumentSerializer(serializers.ModelSerializer):
 
                 # for EmbeddedDocumentSerializers, call recursive_save
                 if isinstance(field, EmbeddedDocumentSerializer):
-                    me_data[key] = field.recursive_save(value) if value is not None else value # issue when the value is none 
+                    field.partial = self.partial
+                    me_data[key] = field.recursive_save(value, instance=instance[key]) if value is not None else value # issue when the value is none
 
                 # same for lists of EmbeddedDocumentSerializers i.e.
                 # ListField(EmbeddedDocumentField) or EmbeddedDocumentListField
